@@ -104,28 +104,84 @@
             }
         }.bind(this);
 
-        container.addEventListener('touchstart', this.handlers[swipe]['touchstart'], false);
+        addEventListener(container, 'touchstart', this.handlers[swipe]['touchstart'], false);
 
         if (this.options.preventMove) {
-            container.addEventListener('touchmove', this.handlers[swipe]['touchmove'], false);
+            addEventListener(container, 'touchmove', this.handlers[swipe]['touchmove'], false);
         }
 
-        container.addEventListener('touchend', this.handlers[swipe]['touchend'], false);
+        addEventListener(container, 'touchend', this.handlers[swipe]['touchend'], false);
     };
 
     Swipe.prototype.off = function (container) {
         var swipe = container.getAttribute('data-swipe');
 
         if (null !== swipe && this.handlers.hasOwnProperty(swipe)) {
-            container.removeEventListener('touchstart', this.handlers[swipe]['touchstart'], false);
+            removeEventListener(container, 'touchstart', this.handlers[swipe]['touchstart'], false);
 
             if (this.options.preventMove) {
-                container.removeEventListener('touchmove', this.handlers[swipe]['touchmove'], false);
+                removeEventListener(container, 'touchmove', this.handlers[swipe]['touchmove'], false);
             }
 
-            container.removeEventListener('touchend', this.handlers[swipe]['touchend'], false);
+            removeEventListener(container, 'touchend', this.handlers[swipe]['touchend'], false);
         }
     };
+
+    // Helper functions
+    var supportsPassiveOption = false;
+
+    try {
+        var opts = Object.defineProperty({}, 'passive', {
+            get: function () {
+                supportsPassiveOption = true;
+            }.bind(this)
+        });
+        window.addEventListener('test', null, opts);
+        window.removeEventListener('test', null, opts);
+    } catch (e) {
+
+    }
+
+    function addEventListener(elem, event, fn, options, useCapture) {
+        if (! supportsPassiveOption && 'object' == typeof options) {
+            options = options.hasOwnProperty('capture') ? options.capture : false;
+        }
+
+        if ('undefined' === typeof options) {
+            options = {};
+        }
+
+        var events = event.split(" ");
+        if (elem.addEventListener) {
+            for (var i = 0; i < events.length; i ++) {
+                elem.addEventListener(events[i], fn, options, useCapture || false);
+            }
+        } else {
+            for (var j = 0; j < events.length; j ++) {
+                elem.attachEvent("on" + events[j], fn); // older versions of IE
+            }
+        }
+    }
+
+    function removeEventListener(elem, event, fn, options, useCapture) {
+        if (! supportsPassiveOption && 'object' == typeof options) {
+            options = options.hasOwnProperty('capture') ? options.capture : false;
+        }
+
+        if ('undefined' === typeof options) {
+            options = false;
+        }
+
+        if (elem.removeEventListener) {
+            (event.split(" ")).forEach(function (e) {
+                elem.removeEventListener(e, fn, options, useCapture || false);
+            });
+        } else {
+            (event.split(" ")).forEach(function (e) {
+                elem.detachEvent("on" + e, fn);        // older versions of IE
+            });
+        }
+    }
 
     root.nuSwipe = Swipe;
 }());
