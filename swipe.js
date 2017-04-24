@@ -20,7 +20,12 @@
         this.handlers = {};
     }
 
+    // add listeners to start dispatching events
+    // 4 events are supported: swipeleft, swiperight, swipeup, swipedown
     Swipe.prototype.on = function (container, customOptions) {
+
+        container = container || document.body;
+
         this.options = {
             threshold: 150, //required min distance traveled to be considered swipe
             restraint: 200, // maximum distance allowed at the same time in perpendicular direction
@@ -79,7 +84,7 @@
                         swipeEvent.initEvent('swipeleft', true, true);
                         container.dispatchEvent(swipeEvent);
                     } else {
-                        swipeEvent.initEvent('swipeight', true, true);
+                        swipeEvent.initEvent('swiperight', true, true);
                         container.dispatchEvent(swipeEvent);
                     }
                 }
@@ -113,6 +118,7 @@
         addEventListener(container, 'touchend', this.handlers[swipe]['touchend'], false);
     };
 
+    // remove all listeners
     Swipe.prototype.off = function (container) {
         var swipe = container.getAttribute('data-swipe');
 

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Swipe events in pure javascript</title>
+    <meta name="description" content="Simple plugin for swipe events in vanilla javascript">
+    <meta name="keywords" content="swipe events, touch devices, pure javascript, vanilla javascript">
+
+    <style>
+    	/* http://meyerweb.com/eric/tools/css/reset/ 
+		   v2.0 | 20110126
+		   License: none (public domain)
+		*/
+
+		html, body, div, span, applet, object, iframe,
+		h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+		a, abbr, acronym, address, big, cite, code,
+		del, dfn, em, img, ins, kbd, q, s, samp,
+		small, strike, strong, sub, sup, tt, var,
+		b, u, i, center,
+		dl, dt, dd, ol, ul, li,
+		fieldset, form, label, legend,
+		table, caption, tbody, tfoot, thead, tr, th, td,
+		article, aside, canvas, details, embed, 
+		figure, figcaption, footer, header, hgroup, 
+		menu, nav, output, ruby, section, summary,
+		time, mark, audio, video {
+			margin: 0;
+			padding: 0;
+			border: 0;
+			font-size: 100%;
+			font: inherit;
+			vertical-align: baseline;
+		}
+
+		/* HTML5 display-role reset for older browsers */
+		article, aside, details, figcaption, figure, 
+		footer, header, hgroup, menu, nav, section {
+			display: block;
+		}
+
+		body {
+			line-height: 1;
+		    font-family: Raleway,"Helvetica Neue",Helvetica,Arial,sans-serif;
+		}
+
+		body, a {
+			color: #1a1a1a;
+		}
+
+		a {
+			text-decoration: none;
+			border-bottom: 1px #1a1a1a dashed;	
+		}
+
+		a:hover {
+			text-decoration: none;
+			border-bottom: 1px #1a1a1a solid;	
+		}
+
+		ol, ul {
+			margin-left: 2em;
+		}
+
+		blockquote, q {
+			quotes: none;
+		}
+
+		blockquote:before, blockquote:after,
+		q:before, q:after {
+			content: '';
+			content: none;
+		}
+
+		table {
+			border-collapse: collapse;
+			border-spacing: 0;
+		}
+
+        h1, h2 {           
+            font-weight: 600;           
+        }
+
+        h1 {
+        	font-size: 1.3rem;
+        }
+
+        h2 {
+        	font-size: 1.2rem;
+        }
+
+        p.highlighted {
+        	border: 1px dashed #ccc;
+        	padding: 15px;
+        	margin: 10px;
+        }
+
+		.clear:before,
+		.clear:after {
+		    content: " ";
+		    display: table;
+		}
+
+		.clear:after {
+		    clear: both;
+		}
+
+		header, section {
+			padding: 25px;
+		}
+
+		section {
+			line-height: 1.8rem;
+		}
+
+        header img {
+            float: left;
+            height: 50px;
+        }
+
+        header h1 {
+        	float: right;
+        	line-height: 50px;
+        }
+    </style>
+
+    <!--[if lt IE 9]>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+	<![endif]-->
+	<script type="text/javascript">
+        WebFontConfig = function () {
+            function createEvent(eventName) {
+                var event;
+                
+                if (typeof window.CustomEvent === 'function') {
+                    event = new CustomEvent(eventName);
+                } else if (document.createEvent) {
+                    event = document.createEvent('HTMLEvents');
+                    event.initEvent(eventName, true, true);
+                } else if(document.createEventObject){// IE < 9
+                    event = document.createEventObject();
+                    event.eventType = eventName;
+                }
+                
+                return event;
+            }
+            
+            function dispatchEvent(el, event) {
+                if (el.dispatchEvent){
+                    el.dispatchEvent(event);
+                } else if(el.fireEvent && htmlEvents['on'+eventName]){// IE < 9
+                    el.fireEvent('on'+event.eventType,event);// can trigger only a real event (e.g. 'click')
+                } else if(el[eventName]){
+                    el[eventName]();
+                } else if(el['on'+eventName]){
+                    el['on'+eventName]();
+                }
+            }
+            
+            return {active: function() {var event = createEvent("font-active");dispatchEvent(document, event);},google:{families:["Raleway:100,100i,200,200i,300,300i,400,400i,600,600i,800,800i"]},custom:{families:["Aramis"],urls:["\/\/cdn-na.mynilead.com\/assets\/libs\/nilead.font\/aramis-800\/stylesheets\/aramis-800.css"]}};
+        }();
+    </script>
+	<script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript" async></script>
+
+</head>	
+<body>
+
+	<header class="clear">
+		<a href="https://nilead.com" target="_blank">
+			<img src="../assets/nilead.png" alt="Nilead website design and development services" />
+		</a>
+		
+		<h1><a href="https://nilead.com/experiment/full-page-and-multi-scroll-effect" target="_blank">Swipe events in pure Javascript - A Nilead experiment</a></h1>
+			
+	</header>
+
+	<section>
+		<h2>Introduction</h2>
+
+		<p>This is a simple javascript plugin to detect swipe events in touch devices.</p>
+
+		<p>There are many advanved plugins for swipe events out there, jQuery also has built-in support for swipe. This plugin aims to be a simple, light-weight drop in for simple use cases.</p> 
+
+		<h2>Demo</h2>
+
+		<p>Check the <a href="/demo">demo page</a> to see how it's working on your browser.</p>
+
+
+		<h2>Instruction</h2>
+		<p>This plugin is really simple and we try to comment in the code as much as we can, please use the source code as your documents.</p>
+
+		<h2>Dependency</h2>
+		<p>This plugin has no dependency. </p> 
+
+
+		<h2>License</h2>
+		<p>This plugin is released under MIT license. </p>
+		<p class="highlighted">
+		Copyright (c) 2017 Nilead<br>
+
+		Permission is hereby granted, free of charge, to any person obtaining a copy
+		of this software and associated documentation files (the "Software"), to deal
+		in the Software without restriction, including without limitation the rights
+		to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+		copies of the Software, and to permit persons to whom the Software is
+		furnished to do so, subject to the following conditions:<br>
+
+		The above copyright notice and this permission notice shall be included in
+		all copies or substantial portions of the Software.<br>
+
+		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+		AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+		THE SOFTWARE.
+		</p>
+	</section>
+</body>
