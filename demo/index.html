@@ -4,34 +4,115 @@
     <meta charset="UTF-8">
     <title>Swipe demo</title>
 
-    <style>
-        
-    </style>
+    <style type="text/css">
+        body {
+            height: 100vh;
+            margin: 0;
+        }
 
+        #direction {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
+
+        .arrow {
+            display: none;
+        }
+
+        .arrow.active {
+            display: inline;
+        }
+    </style>
+    
     <script src="/swipe.js"></script>
 </head>
 
 <body>
     
+    
+
+    <div id="direction">Start swipping <span id="left" class="arrow">&larr;</span><span id="up" class="arrow">&uarr;</span><span id="right" class="arrow">&rarr;</span><span id="down" class="arrow">&darr;</span></div>
 
     <script type="text/javascript">
         var swipe = new nuSwipe();
-        swipe.on(document.body);
+        swipe.on(document.body, {preventMove: false, allowedTime: 500});
+        var arrows = document.getElementsByClassName('arrow');
+
         document.body.addEventListener('swipedown', function (e) {
-            console.log(e);
+            for (var i = 0; i < arrows.length; i ++) {
+                removeClass(arrows[i], 'active');
+            }
+
+            addClass(document.getElementById('down'), 'active');
         });
 
         document.body.addEventListener('swipeup', function (e) {
-            console.log(e);
+            for (var i = 0; i < arrows.length; i ++) {
+                removeClass(arrows[i], 'active');
+            }
+
+            addClass(document.getElementById('up'), 'active');
         });
 
         document.body.addEventListener('swipeleft', function (e) {
-            console.log(e);
+            for (var i = 0; i < arrows.length; i ++) {
+                removeClass(arrows[i], 'active');
+            }
+
+            addClass(document.getElementById('left'), 'active');
         });
 
         document.body.addEventListener('swiperight', function (e) {
-            console.log(e);
-        })
+            for (var i = 0; i < arrows.length; i ++) {
+                removeClass(arrows[i], 'active');
+            }
+
+            addClass(document.getElementById('right'), 'active');
+        });
+
+        function removeClass (elem, className) {
+            // support multiple classes
+            var classNames = className.split(' ');
+
+            if (elem.classList) {
+                for (var j = 0; j < classNames.length; j ++) {
+                    elem.classList.remove(classNames[j]);
+                }
+            } else if (elem.className) {
+                for (var k = 0; k < classNames.length; k ++) {
+                    elem.className = elem
+                        .className
+                        .split(' ')
+                        .filter(function (name) {
+                            return name !== classNames[k];
+                        })
+                        .join(' ');
+                }
+            }
+        }
+
+        function addClass (elem, className) {
+            // support multiple classes
+            var classNames = className.split(' ');
+
+            if (elem.classList) {
+                for (var j = 0; j < classNames.length; j ++) {
+                    elem.classList.add(classNames[j]);
+                }
+            } else if (elem.className) {
+                for (var k = 0; k < classNames.length; k ++) {
+                    elem.className = elem
+                        .className
+                        .split(' ')
+                        .filter(function (name) {
+                            return name !== classNames[k];
+                        }).join(' ');
+                }
+            }
+        }
+
     </script>
 </body>
 </html>
