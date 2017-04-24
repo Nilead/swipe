@@ -15,7 +15,8 @@
     
 
     <script type="text/javascript">
-        var swipe = new nuSwipe(document.body);
+        var swipe = new nuSwipe();
+        swipe.on(document.body);
         document.body.addEventListener('swipedown', function (e) {
             console.log(e);
         });
