@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Swipe demo</title>
 
-    <link rel="stylesheet" href="/pagescroll.css">
     <style>
         
     </style>
@@ -19,11 +18,17 @@
         var swipe = new nuSwipe(document.body);
         document.body.addEventListener('swipedown', function (e) {
             console.log(e);
-        }).addEventListener('swipeup', function (e) {
+        });
+
+        document.body.addEventListener('swipeup', function (e) {
             console.log(e);
-        }).addEventListener('swipeleft', function (e) {
+        });
+
+        document.body.addEventListener('swipeleft', function (e) {
             console.log(e);
-        }).addEventListener('swiperight', function (e) {
+        });
+
+        document.body.addEventListener('swiperight', function (e) {
             console.log(e);
         })
     </script>
